@@ -1,6 +1,6 @@
 // Function to calculate points based on retailer name
 export function calculateRetailerPoints(retailer) {
-  return retailer.replace(/[^a-zA-Z0-9]/g, '').length;
+  return retailer.replace(/[^a-zA-Z0-9]/g, "").length;
 }
 
 // Function to calculate points based on total amount being a round dollar amount with no cents
@@ -37,8 +37,8 @@ export function calculatePurchaseDatePoints(purchaseDate) {
 
 // Function to calculate points if the time of purchase is between 2:00pm and 4:00pm
 export function calculatePurchaseTimePoints(purchaseTime) {
-  const [hours, minutes] = purchaseTime.split(':').map(Number);
-  return (hours >= 14 && minutes > 0) && (hours <= 15 && minutes <= 59) ? 10 : 0;
+  const [hours, minutes] = purchaseTime.split(":").map(Number);
+  return hours >= 14 && minutes > 0 && hours <= 15 && minutes <= 59 ? 10 : 0;
 }
 
 // Main function to calculate total points
@@ -66,7 +66,7 @@ export function validateTotal(receipt) {
   const calculatedTotal = receipt.items.reduce((sum, item) => {
     return sum + parseFloat(item.price);
   }, 0);
-  console.log(totalFromReceipt,calculatedTotal)
+
   // Compare the calculated total with the total from the receipt
   return roundToTwo(totalFromReceipt) === roundToTwo(calculatedTotal);
 }
