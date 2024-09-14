@@ -35,9 +35,9 @@ describe("Receipt Schema", () => {
       });
     });
 
-    it(`should return no error if retailer is '${retailer}'`, () => {
+    it(`should return no error if retailer is correct`, () => {
       const receipt = {
-        retailer: retailer,
+        retailer: "Target & Target",
         purchaseDate: "2022-01-01",
         purchaseTime: "13:01",
         items: [{ shortDescription: "Mountain Dew 12PK", price: "6.49" }],
@@ -45,7 +45,7 @@ describe("Receipt Schema", () => {
       };
 
       const { error } = receiptSchema.validate(receipt);
-      expect(error).to.exist;
+      expect(error).to.not.exist;
     });
 
 
