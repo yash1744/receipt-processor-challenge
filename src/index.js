@@ -1,27 +1,40 @@
 import express from "express";
 import { v4 as uuidv4 } from "uuid";
 import receiptSchema from "./schema.js"
-import calculatePoints from "./utils.js";
+import calculatePoints,{validateTotal} from "./utils.js";
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
 
+app.use((err, req, res, next) => {
+  if (err instanceof SyntaxError ) {
+    return res.status(400).json({ error: "Invalid receipt format" });
+  }
+  next(err);
+})
+
 const receipts = {};
 
 // POST /receipts/process
 app.post("/receipts/process", (req, res) => {
-  const receipt = req.body;
-  const { error} = receiptSchema.validate(receipt);
-  if (error) {
+  try {
+    const receipt = req.body;
+    const { error} = receiptSchema.validate(receipt);
+    if (error || !validateTotal(receipt)) {
 
+      return res.status(400).json({ error: "Invalid receipt format" });
+    }     
+    const id = uuidv4();
+    receipts[id] = { ...receipt, points: calculatePoints(receipt) };
+  
+    res.status(200).json({ id });
+  } catch (error) {
     return res.status(400).json({ error: "Invalid receipt format" });
-  } 
-  const id = uuidv4();
-  receipts[id] = { ...receipt, points: calculatePoints(receipt) };
 
-  res.status(200).json({ id });
+  }
+ 
 });
 
 

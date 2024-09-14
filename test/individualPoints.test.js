@@ -92,13 +92,13 @@ describe('calculatePurchaseDatePoints', () => {
 
 describe('calculatePurchaseTimePoints', () => {
   it('should return 10 points for times between 2:00 PM and 4:00 PM', () => {
-    expect(calculatePurchaseTimePoints('14:00')).to.equal(10);
     expect(calculatePurchaseTimePoints('15:25')).to.equal(10);
-    expect(calculatePurchaseTimePoints('16:00')).to.equal(10);
   });
-
+  
   it('should return 0 points for times outside the range', () => {
+    expect(calculatePurchaseTimePoints('14:00')).to.equal(0);
     expect(calculatePurchaseTimePoints('13:59')).to.equal(0);
+    expect(calculatePurchaseTimePoints('16:00')).to.equal(0);
     expect(calculatePurchaseTimePoints('16:01')).to.equal(0);
   });
 });

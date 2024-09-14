@@ -38,7 +38,7 @@ export function calculatePurchaseDatePoints(purchaseDate) {
 // Function to calculate points if the time of purchase is between 2:00pm and 4:00pm
 export function calculatePurchaseTimePoints(purchaseTime) {
   const [hours, minutes] = purchaseTime.split(':').map(Number);
-  return (hours === 14 || (hours === 15) || (hours === 16 && minutes === 0)) ? 10 : 0;
+  return (hours >= 14 && minutes > 0) && (hours <= 15 && minutes <= 59) ? 10 : 0;
 }
 
 // Main function to calculate total points
@@ -52,4 +52,21 @@ export default function calculatePoints(receipt) {
   points += calculatePurchaseDatePoints(receipt.purchaseDate);
   points += calculatePurchaseTimePoints(receipt.purchaseTime);
   return points;
+}
+
+function roundToTwo(num) {
+  return Math.round(num * 100) / 100;
+}
+
+export function validateTotal(receipt) {
+  // Parse the total from the receipt
+  const totalFromReceipt = parseFloat(receipt.total);
+
+  // Calculate the sum of individual item prices
+  const calculatedTotal = receipt.items.reduce((sum, item) => {
+    return sum + parseFloat(item.price);
+  }, 0);
+  console.log(totalFromReceipt,calculatedTotal)
+  // Compare the calculated total with the total from the receipt
+  return roundToTwo(totalFromReceipt) === roundToTwo(calculatedTotal);
 }
